@@ -1,0 +1,75 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* hacer que todo el body sea el hero */
+body.hero {
+    background: #3A4D39; /* color de fondo */
+    color: #faf8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    min-height: 100vh;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* contenedor centrado verticalmente */
+.container {
+    max-width: 1100px;
+    width: 100%;
+    padding: 0 1.25rem;
+    box-sizing: border-box;
+}
+
+/* contenido interno */
+.hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+/* texto izquierdo */
+.left { flex: 1 1 60%; padding-left: 1rem; }
+.left h1 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin: 0 0 .6rem 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.left p { font-size: 1.15rem; margin: 0; max-width: 520px; }
+
+/* imagen derecha */
+.right { flex: 0 0 220px; display:flex; align-items:center; justify-content:center; }
+.logo-img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 50%;
+    display:block;
+}
+
+/* líneas decorativas */
+.lines { position: absolute; left: 3rem; bottom: 2.5rem; display:flex; gap:1.2rem; align-items:center; }
+.lines span { display:block; height:3px; width:160px; background:rgba(0,0,0,0.18); }
+.lines span.light { width:120px; background:rgba(255,255,255,0.35); }
+
+/* botón circular */
+.arrow-btn {
+    position: fixed; right: 2.2rem; bottom: 1.8rem;
+    width:56px; height:56px; border-radius:50%; background:#3dd07a; color:#fff;
+    display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.15);
+    text-decoration:none; z-index:40; transition:transform .15s ease;
+}
+.arrow-btn:hover { transform: translateY(-3px); }
+
+/* responsive */
+@media(max-width:900px){
+    .hero-inner { flex-direction: column; text-align:left; padding: 2rem 1rem; }
+    .logo-img { width: 120px; height: 120px; }
+    .left h1 { font-size: 2.4rem; }
+    .lines { left: 1.25rem; }
+}
