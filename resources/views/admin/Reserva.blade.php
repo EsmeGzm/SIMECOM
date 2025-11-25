@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>SIMECOM Dashboard</title>
+    <title>SIMECOM Reserva</title>
     <link rel="stylesheet" href="{{ asset('dashboardstyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -37,6 +37,7 @@
                                 <thead>
                                     <tr>
                                         <th>CURP</th>
+                                        <th>Matricula</th>
                                         <th>Nombre</th>
                                         <th>A. paterno</th>
                                         <th>A. materno</th>
@@ -49,6 +50,7 @@
                                 <tbody>
                                     <tr>
                                         <td>GUVE0205</td>
+                                        <td>2023001</td>
                                         <td>Eduardo</td>
                                         <td>Guzmán</td>
                                         <td>Vega</td>
@@ -58,10 +60,8 @@
                                         <td>
                                             <i class="fa fa-eye"></i>
                                             <i class="fa fa-edit"></i>
-                                            <i class="fa fa-trash"></i>
                                         </td>
                                     </tr>
-                                    <!-- Más filas aquí -->
                                 </tbody>
                             </table>
                         </div>
