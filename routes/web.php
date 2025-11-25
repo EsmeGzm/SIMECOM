@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 /*
 Route::get('/', function () {
@@ -22,13 +22,22 @@ Route::get('/contact', function () {
 })->name('contact');
 
 
-Route::get('/dashboard', [UserController::class, 'home'])
+Route::get('/dashboard', [AdminController::class, 'home'])
 ->middleware(['auth', 'verified'])
 ->name('dashboard');
 
-Route::get('admin/dashboard', [UserController::class, 'index'])
+Route::get('admin/dashboard', [AdminController::class, 'index'])
 ->middleware(['auth', 'admin'])
 ->name('admin.dashboard');
+
+
+Route::get('/admin/reclutas', [AdminController::class, 'reclutas'])
+->middleware(['auth', 'admin'])
+->name('admin.reclutas');
+
+Route::get('/admin/reserva', [AdminController::class, 'reserva'])
+->middleware(['auth', 'admin'])
+->name('admin.reserva');
 
 /*
 Route::get('/dashboard', function () {
