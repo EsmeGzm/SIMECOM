@@ -565,11 +565,11 @@
                                                 <td>{{ $dato->clase }}</td>
                                                 <td>{{ $dato->domicilio }}</td>
                                                 <td>{{ $dato->status }}</td>
-                                                <td>{!! $dato->acta_nacimiento ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: red;"></i>' !!}</td>
-                                                <td>{!! $dato->copia_curp ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: red;"></i>' !!}</td>
-                                                <td>{!! $dato->certificado_estudios ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: red;"></i>' !!}</td>
-                                                <td>{!! $dato->comprobante_domicilio ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: red;"></i>' !!}</td>
-                                                <td>{!! $dato->fotografias ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: red;"></i>' !!}</td>
+                                                <td>{!! $dato->acta_nacimiento ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
+                                                <td>{!! $dato->copia_curp ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
+                                                <td>{!! $dato->certificado_estudios ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
+                                                <td>{!! $dato->comprobante_domicilio ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
+                                                <td>{!! $dato->fotografias ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
                                                 <td>
                                                     <i class="fa fa-eye" onclick="abrirModalVer('{{ $dato->curp }}')"></i>
                                                     <i class="fa fa-edit" onclick="abrirModalEditar('{{ $dato->curp }}', '{{ $dato->nombre }} {{ $dato->apellido_paterno }} {{ $dato->apellido_materno }}', '{{ $dato->status }}', '{{ $dato->matricula }}')"></i>
