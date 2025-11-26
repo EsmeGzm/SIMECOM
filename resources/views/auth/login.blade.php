@@ -28,7 +28,7 @@
                     <div class="form-row field">
                         <div class="field-label">
                             <i class="fa fa-user" aria-hidden="true"></i>
-                            <span>Username:</span>
+                            <span>Usuario:</span>
                         </div>
 
                         <div class="input-wrapper">
@@ -40,7 +40,7 @@
                     <div class="form-row field">
                         <div class="field-label">
                             <i class="fa fa-lock" aria-hidden="true"></i>
-                            <span>Password:</span>
+                            <span>Contraseña:</span>
                         </div>
 
                         <div class="input-wrapper">
