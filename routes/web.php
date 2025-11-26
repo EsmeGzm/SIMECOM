@@ -72,4 +72,11 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::delete('/reclutas/{curp}', [App\Http\Controllers\ReclutasController::class, 'destroy'])->name('reclutas.destroy');
 });
 
+// Rutas para Reserva
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('/reserva', [App\Http\Controllers\ReservaController::class, 'index'])->name('admin.reserva');
+    Route::get('/reserva/{curp}/edit', [App\Http\Controllers\ReservaController::class, 'edit'])->name('reserva.edit');
+    Route::put('/reserva/{curp}', [App\Http\Controllers\ReservaController::class, 'update'])->name('reserva.update');
+});
+
 require __DIR__.'/auth.php';
