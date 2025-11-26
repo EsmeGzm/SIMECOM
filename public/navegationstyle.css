@@ -7,6 +7,19 @@ nav.bg-white {
 }
 
 /* ========================================
+   LOGO MÁS GRANDE
+======================================== */
+nav .shrink-0 img {
+    height: 65px !important;
+    width: auto !important;
+    transition: transform 0.3s ease !important;
+}
+
+nav .shrink-0 a:hover img {
+    transform: scale(1.1) !important;
+}
+
+/* ========================================
    ESPACIADO ENTRE ICONO Y TEXTO
 ======================================== */
 nav svg {
