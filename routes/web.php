@@ -63,4 +63,13 @@ Route::put('/datos/{curp}', [DatosController::class, 'update'])
 Route::delete('/datos/{curp}', [DatosController::class, 'destroy'])
     ->name('datos.destroy');
 
+// Rutas para Reclutas
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::get('/reclutas', [App\Http\Controllers\ReclutasController::class, 'index'])->name('admin.reclutas');
+    Route::post('/reclutas', [App\Http\Controllers\ReclutasController::class, 'store'])->name('reclutas.store');
+    Route::get('/reclutas/{curp}/edit', [App\Http\Controllers\ReclutasController::class, 'edit'])->name('reclutas.edit');
+    Route::put('/reclutas/{curp}', [App\Http\Controllers\ReclutasController::class, 'update'])->name('reclutas.update');
+    Route::delete('/reclutas/{curp}', [App\Http\Controllers\ReclutasController::class, 'destroy'])->name('reclutas.destroy');
+});
+
 require __DIR__.'/auth.php';

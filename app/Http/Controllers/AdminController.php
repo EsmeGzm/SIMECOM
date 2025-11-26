@@ -30,7 +30,22 @@ class AdminController extends Controller
   public function reclutas(Request $request)
   {
     if ($request->user()->usertype === 'admin') {
-      return view('admin.Reclutas');
+      $search = $request->get('search');
+      
+      $datos = \App\Models\Dato::where('status', 'Recluta')
+          ->when($search, function($query, $search) {
+              return $query->where(function($q) use ($search) {
+                  $q->where('curp', 'LIKE', "%{$search}%")
+                    ->orWhere('nombre', 'LIKE', "%{$search}%")
+                    ->orWhere('apellido_paterno', 'LIKE', "%{$search}%")
+                    ->orWhere('apellido_materno', 'LIKE', "%{$search}%")
+                    ->orWhere('clase', 'LIKE', "%{$search}%")
+                    ->orWhere('domicilio', 'LIKE', "%{$search}%");
+              });
+          })
+          ->get();
+      
+      return view('admin.Reclutas', compact('datos', 'search'));
     } else {
       return redirect()->route('dashboard');
     }
