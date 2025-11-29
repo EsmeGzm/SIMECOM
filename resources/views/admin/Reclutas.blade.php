@@ -12,12 +12,6 @@
 
 <body>
     <x-app-layout>
-        <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('RECLUTAS') }}
-            </h2>
-        </x-slot>
-
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -29,7 +23,7 @@
                                     type="text" 
                                     name="search" 
                                     class="search-input" 
-                                    placeholder="Buscar por CURP, nombre, apellidos, clase, domicilio..." 
+                                    placeholder="Introduce aquí tu búsqueda" 
                                     value="{{ $search ?? '' }}"
                                     id="search-input"
                                 >
@@ -526,18 +520,18 @@
                                 <thead>
                                     <tr>
                                         <th>CURP</th>
-                                        <th>Nombre</th>
-                                        <th>A. paterno</th>
-                                        <th>A. materno</th>
-                                        <th>Clase</th>
-                                        <th>Domicilio</th>
-                                        <th>Status</th>
-                                        <th>Acta</th>
+                                        <th>NOMBRE</th>
+                                        <th>A. PATERNO</th>
+                                        <th>A. MATERNO</th>
+                                        <th>CLASE</th>
+                                        <th>DOMICILIO</th>
+                                        <th>STATUS</th>
+                                        <th>ACTA</th>
                                         <th>CURP</th>
-                                        <th>Certificado</th>
-                                        <th>Comprobante</th>
-                                        <th>Fotos</th>
-                                        <th>Acciones</th>
+                                        <th>CERTIFICADO</th>
+                                        <th>COMPROBANTE</th>
+                                        <th>FOTOS</th>
+                                        <th>ACCIONES</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tabla-reclutas">
