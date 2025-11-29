@@ -17,8 +17,8 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         <!-- Barra de búsqueda -->
-                        <div class="search-container">
-                            <form method="GET" action="{{ route('admin.reclutas') }}" style="display: flex; width: 100%; align-items: center;">
+                         <div class="search-container">
+                            <form method="GET" action="{{ route('admin.dashboard') }}" style="display: flex; width: 100%; align-items: center; gap: 10px;">
                                 <input 
                                     type="text" 
                                     name="search" 
@@ -27,9 +27,14 @@
                                     value="{{ $search ?? '' }}"
                                     id="search-input"
                                 >
-                                <button type="submit" class="search-btn">
+                                <button type="submit" class="search-btn" title="Buscar">
                                     <i class="fa fa-search"></i>
                                 </button>
+                                @if(isset($search) && $search)
+                                    <a href="{{ route('admin.dashboard') }}" class="search-btn" style="background: #8B4513; text-decoration: none; margin-left: 5px;" title="Limpiar búsqueda">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                @endif
                             </form>
                         </div>
 
