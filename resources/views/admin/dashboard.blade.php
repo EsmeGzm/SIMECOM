@@ -6,47 +6,37 @@
     <title>SIMECOM Dashboard</title>
     <link rel="stylesheet" href="{{ asset('dashboardstyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
     <x-app-layout>
-        <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('SIMECOM') }}
-            </h2>
-        </x-slot>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
-                        <!-- Barra de búsqueda -->
+                        <!-- Barra de búsqueda mejorada -->
                         <div class="search-container">
-                            <form method="GET" action="{{ route('admin.dashboard') }}" style="display: flex; width: 100%; align-items: center;">
+                            <form method="GET" action="{{ route('admin.dashboard') }}" style="display: flex; width: 100%; align-items: center; gap: 10px;">
                                 <input 
                                     type="text" 
                                     name="search" 
                                     class="search-input" 
-                                    placeholder="Buscar por CURP, nombre, apellidos, matrícula, clase..." 
+                                    placeholder="Introduce aquí tu búsqueda" 
                                     value="{{ $search ?? '' }}"
                                     id="search-input"
                                 >
-                                <button type="submit" class="search-btn">
+                                <button type="submit" class="search-btn" title="Buscar">
                                     <i class="fa fa-search"></i>
                                 </button>
+                                @if(isset($search) && $search)
+                                    <a href="{{ route('admin.dashboard') }}" class="search-btn" style="background: #8B4513; text-decoration: none; margin-left: 5px;" title="Limpiar búsqueda">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                @endif
                             </form>
                         </div>
-
-                        @if(isset($search) && $search)
-                            <div style="text-align: center; margin: 10px 0;">
-                                <span style="color: #3A4D39; font-weight: bold;">
-                                    Resultados para: "{{ $search }}"
-                                </span>
-                                <a href="{{ route('admin.dashboard') }}" style="color: #8B4513; margin-left: 15px; text-decoration: none; font-weight: bold;">
-                                    <i class="fa fa-times-circle"></i> Limpiar búsqueda
-                                </a>
-                            </div>
-                        @endif
 
                         <!-- Botón Nuevo -->
                         <button class="nuevo-btn" onclick="document.getElementById('modal-nuevo').style.display='flex'">
@@ -486,37 +476,29 @@
                             </div>
                         </div>
 
-                        <!-- Modal para ELIMINAR -->
-                        <div id="modal-eliminar" class="modal-bg" style="display:none;">
+                        <!-- Modal ELIMINAR -->
+                        <div id="modal-eliminar" class="modal-bg">
                             <div class="modal-content modal-eliminar">
                                 <span class="close-modal" onclick="document.getElementById('modal-eliminar').style.display='none'">&times;</span>
                                 
-                                <div class="modal-section">
-                                    <h3 class="section-title" style="background: #8B4513;">CONFIRMAR ELIMINACIÓN</h3>
-                                    
-                                    <div style="text-align: center; padding: 30px;">
-                                        <i class="fa fa-exclamation-triangle" style="font-size: 4em; color: #ff6b6b; margin-bottom: 20px;"></i>
-                                        <p style="color: #b7b084; font-size: 1.2em; margin-bottom: 10px;">
-                                            ¿Estás seguro de eliminar este registro?
-                                        </p>
-                                        <p style="color: #b7b084; font-size: 1em;">
-                                            <strong id="eliminar-nombre"></strong>
-                                        </p>
-                                        <p style="color: #ff6b6b; font-size: 0.9em; margin-top: 15px;">
-                                            Esta acción no se puede deshacer.
-                                        </p>
-                                    </div>
-                                </div>
+                                <h2 style="color: #b7b084; text-align: center; margin-bottom: 30px;">
+                                    <i class="fa fa-exclamation-triangle" style="color: #ff6b6b;"></i> Confirmar Eliminación
+                                </h2>
                                 
-                                <form method="POST" id="form-eliminar">
+                                <p style="color: #fff; text-align: center; font-size: 1.1em; margin-bottom: 30px;">
+                                    ¿Estás seguro de que deseas eliminar a <strong id="eliminar-nombre" style="color: #b7b084;"></strong>?
+                                </p>
+                                
+                                <form id="form-eliminar" method="POST">
                                     @csrf
                                     @method('DELETE')
+                                    
                                     <div class="modal-actions">
-                                        <button type="submit" class="eliminar-btn">
-                                            ELIMINAR <i class="fa fa-trash"></i>
-                                        </button>
                                         <button type="button" class="cancelar-btn" onclick="document.getElementById('modal-eliminar').style.display='none'">
-                                            CANCELAR <i class="fa fa-times-circle"></i>
+                                            <i class="fa fa-times"></i> Cancelar
+                                        </button>
+                                        <button type="submit" class="eliminar-btn">
+                                            <i class="fa fa-trash"></i> Eliminar
                                         </button>
                                     </div>
                                 </form>
@@ -529,57 +511,28 @@
                                 <thead>
                                     <tr>
                                         <th>CURP</th>
-                                        <th>Nombre</th>
-                                        <th>A. paterno</th>
-                                        <th>A. materno</th>
-                                        <th>Clase</th>
-                                        <th>Domicilio</th>
-                                        <th>Status</th>
-                                        <th>Acta</th>
+                                        <th>NOMBRE</th>
+                                        <th>A. PATERNO</th>
+                                        <th>A. MATERNO</th>
+                                        <th>CLASE</th>
+                                        <th>DOMICILIO</th>
+                                        <th>STATUS</th>
+                                        <th>ACTA</th>
                                         <th>CURP</th>
-                                        <th>Certificado</th>
-                                        <th>Comprobante</th>
-                                        <th>Fotos</th>
-                                        <th>Acciones</th>
+                                        <th>CERTIFICADO</th>
+                                        <th>COMPROBANTE</th>
+                                        <th>FOTOS</th>
+                                        <th>ACCIONES</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @if($datos->isEmpty())
-                                        <tr>
-                                            <td colspan="13" style="text-align: center; padding: 40px; color: #b7b084; font-size: 1.2em;">
-                                                <i class="fa fa-search" style="font-size: 3em; display: block; margin-bottom: 15px;"></i>
-                                                @if(isset($search) && $search)
-                                                    No se encontraron resultados para "{{ $search }}"
-                                                @else
-                                                    No hay registros de reclutas
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @else
-                                        @foreach($datos as $dato)
-                                            <tr>
-                                                <td>{{ $dato->curp }}</td>
-                                                <td>{{ $dato->nombre }}</td>
-                                                <td>{{ $dato->apellido_paterno }}</td>
-                                                <td>{{ $dato->apellido_materno }}</td>
-                                                <td>{{ $dato->clase }}</td>
-                                                <td>{{ $dato->domicilio }}</td>
-                                                <td>{{ $dato->status }}</td>
-                                                <td>{!! $dato->acta_nacimiento ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
-                                                <td>{!! $dato->copia_curp ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
-                                                <td>{!! $dato->certificado_estudios ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
-                                                <td>{!! $dato->comprobante_domicilio ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
-                                                <td>{!! $dato->fotografias ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
-                                                <td>
-                                                    <i class="fa fa-eye" onclick="abrirModalVer('{{ $dato->curp }}')"></i>
-                                                    <i class="fa fa-edit" onclick="abrirModalEditar('{{ $dato->curp }}', '{{ $dato->nombre }} {{ $dato->apellido_paterno }} {{ $dato->apellido_materno }}', '{{ $dato->status }}', '{{ $dato->matricula }}')"></i>
-                                                    <i class="fa fa-trash" onclick="abrirModalEliminar('{{ $dato->curp }}', '{{ $dato->nombre }} {{ $dato->apellido_paterno }} {{ $dato->apellido_materno }}')"></i>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
+                                <tbody id="tabla-registros">
+                                    <!-- Los registros se cargarán aquí con JavaScript -->
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Paginación simple -->
+                        <div id="paginacion-info" style="text-align: center; margin: 20px 0; color: #b7b084;">
                         </div>
 
                         <!-- Mensajes de éxito o error -->
@@ -599,6 +552,122 @@
                                 {{ session('success') }}
                             </div>
                         @endif
+
+                        <!-- Script para cargar registros en JavaScript -->
+                        <script>
+                        // Datos de la tabla (vienen del servidor Laravel)
+                        const todosRegistros = @json($datos);
+                        const searchTerm = "{{ $search ?? '' }}";
+
+                        // Función para cargar y mostrar registros
+                        function cargarRegistros() {
+                            const tablaBody = document.getElementById('tabla-registros');
+                            const paginacionInfo = document.getElementById('paginacion-info');
+                            
+                            // Si hay búsqueda, mostrar todos los resultados de búsqueda
+                            // Si NO hay búsqueda, mostrar solo los últimos 10
+                            let registrosAMostrar = searchTerm ? todosRegistros : todosRegistros.slice(0, 10);
+                            
+                            if (registrosAMostrar.length === 0) {
+                                if (searchTerm) {
+                                    // Mensaje cuando hay búsqueda sin resultados
+                                    tablaBody.innerHTML = `
+                                        <tr>
+                                            <td colspan="13" style="text-align: center; padding: 60px 40px;">
+                                                <div style="line-height: 2;">
+                                                    <i class="fa fa-search" style="font-size: 3.5em; display: block; margin-bottom: 20px; color: #b7b084; opacity: 0.6;"></i>
+                                                    <strong style="font-size: 1.3em; color: #fff; display: block; margin-bottom: 10px;">No se encontraron resultados</strong>
+                                                    <p style="color: #b7b084; margin: 0; font-size: 1em;">
+                                                        No hay registros que coincidan con "<span style="color: #fff; font-weight: bold;">${searchTerm}</span>"
+                                                    </p>
+                                                    <p style="color: #87CEEB; margin-top: 15px; font-size: 0.9em;">
+                                                        <i class="fa fa-info-circle"></i> Intenta con otro término de búsqueda
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    paginacionInfo.innerHTML = `
+                                        <i class="fa fa-search"></i>
+                                        <strong>Búsqueda sin resultados:</strong> "${searchTerm}" 
+                                        <span>0 registros encontrados</span>
+                                    `;
+                                } else {
+                                    // Mensaje cuando no hay registros en la base de datos
+                                    tablaBody.innerHTML = `
+                                        <tr>
+                                            <td colspan="13" style="text-align: center; padding: 60px 40px;">
+                                                <div style="line-height: 2;">
+                                                    <i class="fa fa-inbox" style="font-size: 3.5em; display: block; margin-bottom: 20px; color: #b7b084; opacity: 0.6;"></i>
+                                                    <strong style="font-size: 1.3em; color: #fff; display: block; margin-bottom: 10px;">No hay registros aún</strong>
+                                                    <p style="color: #b7b084; margin: 0; font-size: 1em;">
+                                                        Haz clic en <span style="color: #fff; font-weight: bold;">"NUEVO"</span> para crear tu primer registro
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    paginacionInfo.innerHTML = '';
+                                }
+                            } else {
+                                // Generar HTML de registros
+                                let html = '';
+                                registrosAMostrar.forEach(dato => {
+                                    // Determinar imagen de status
+                                    let statusImg = '';
+                                    if (dato.status === 'Recluta') {
+                                        statusImg = '<img src="/images/recluta.png" alt="Recluta" class="status-icon" title="Recluta">';
+                                    } else if (dato.status === 'Reserva') {
+                                        statusImg = '<img src="/images/reserva.png" alt="Reserva" class="status-icon" title="Reserva">';
+                                    } else {
+                                        statusImg = '<img src="/images/desconocido.png" alt="Desconocido" class="status-icon" title="Desconocido">';
+                                    }
+                                    
+                                    html += `
+                                        <tr>
+                                            <td>${dato.curp}</td>
+                                            <td>${dato.nombre}</td>
+                                            <td>${dato.apellido_paterno}</td>
+                                            <td>${dato.apellido_materno}</td>
+                                            <td>${dato.clase || '-'}</td>
+                                            <td>${dato.domicilio || '-'}</td>
+                                            <td style="text-align: center;">${statusImg}</td>
+                                            <td>${dato.acta_nacimiento ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                                            <td>${dato.copia_curp ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                                            <td>${dato.certificado_estudios ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                                            <td>${dato.comprobante_domicilio ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                                            <td>${dato.fotografias ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                                            <td>
+                                                <i class="fa fa-eye" onclick="abrirModalVer('${dato.curp}')" title="Ver detalles" style="cursor: pointer;"></i>
+                                                <i class="fa fa-edit" onclick="abrirModalEditar('${dato.curp}', '${dato.nombre} ${dato.apellido_paterno} ${dato.apellido_materno}', '${dato.status}', '${dato.matricula || ''}')" title="Editar" style="cursor: pointer;"></i>
+                                                <i class="fa fa-trash" onclick="abrirModalEliminar('${dato.curp}', '${dato.nombre} ${dato.apellido_paterno} ${dato.apellido_materno}')" title="Eliminar" style="cursor: pointer;"></i>
+                                            </td>
+                                        </tr>
+                                    `;
+                                });
+                                
+                                tablaBody.innerHTML = html;
+                                
+                                // Mostrar información de paginación solo abajo
+                                if (searchTerm) {
+                                    paginacionInfo.innerHTML = `
+                                        <i class="fa fa-filter"></i>
+                                        <strong>Búsqueda:</strong> "${searchTerm}" 
+                                        <span>${registrosAMostrar.length} resultado${registrosAMostrar.length != 1 ? 's' : ''}</span>
+                                    `;
+                                } else {
+                                    paginacionInfo.innerHTML = `
+                                        <i class="fa fa-list"></i>
+                                        <strong>Últimos 10 registros</strong>
+                                        <span>${registrosAMostrar.length} registro${registrosAMostrar.length != 1 ? 's' : ''}</span>
+                                    `;
+                                }
+                            }
+                        }
+
+                        // Cargar registros cuando el DOM esté listo
+                        document.addEventListener('DOMContentLoaded', cargarRegistros);
+                        </script>
                     </div>
                 </div>
             </div>
@@ -606,7 +675,65 @@
     </x-app-layout>
 
     <!-- filepath: resources/views/admin/dashboard.blade.php -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    .swal2-popup {
+        background: #5c6846 !important;
+        border-radius: 15px !important;
+    }
+    .swal2-title {
+        color: #b7b084 !important;
+    }
+    .swal2-html-container {
+        color: #fff !important;
+    }
+    .swal2-confirm {
+        background-color: #3A4D39 !important;
+        color: #b7b084 !important;
+    }
+    .swal2-icon.swal2-success .swal2-success-ring {
+        border-color: #4CAF50 !important;
+    }
+    .swal2-icon.swal2-error {
+        border-color: #d32f2f !important;
+    }
+</style>
+
 <script>
+function mostrarExito(titulo, mensaje) {
+    Swal.fire({
+        icon: 'success',
+        title: titulo,
+        text: mensaje,
+        background: '#5c6846',
+        color: '#b7b084',
+        confirmButtonColor: '#3A4D39',
+        confirmButtonText: 'Aceptar'
+    }).then(() => {
+        location.reload();
+    });
+}
+
+function mostrarError(titulo, mensaje) {
+    Swal.fire({
+        icon: 'error',
+        title: titulo,
+        text: mensaje,
+        background: '#5c6846',
+        color: '#b7b084',
+        confirmButtonColor: '#d32f2f',
+        confirmButtonText: 'Aceptar'
+    });
+}
+
+// Función para obtener el CSRF token
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
+           document.querySelector('input[name="_token"]')?.value || 
+           '';
+}
+
 // Modal VER
 function abrirModalVer(curp) {
     fetch('/datos/' + curp + '/edit')
@@ -642,7 +769,6 @@ function abrirModalEditar(curp, nombre, status, matricula) {
     fetch('/datos/' + curp + '/edit')
         .then(response => response.json())
         .then(dato => {
-            // Datos personales
             document.getElementById('edit-curp').value = dato.curp;
             document.getElementById('edit-curp-original').value = dato.curp;
             document.getElementById('edit-nombre').value = dato.nombre;
@@ -659,10 +785,8 @@ function abrirModalEditar(curp, nombre, status, matricula) {
             document.getElementById('edit-matricula').value = dato.matricula || '';
             document.getElementById('edit-status').value = dato.status;
             
-            // Habilitar/deshabilitar matrícula según el status
             toggleMatricula();
             
-            // Documentación
             if (dato.acta_nacimiento) {
                 document.getElementById('edit-acta-si').checked = true;
             } else {
@@ -698,7 +822,6 @@ function abrirModalEditar(curp, nombre, status, matricula) {
         });
 }
 
-// Función para habilitar/deshabilitar matrícula según el status
 function toggleMatricula() {
     const status = document.getElementById('edit-status').value;
     const matriculaInput = document.getElementById('edit-matricula');
@@ -717,21 +840,136 @@ function toggleMatricula() {
     }
 }
 
-// Modal ELIMINAR
 function abrirModalEliminar(curp, nombre) {
     document.getElementById('eliminar-nombre').textContent = nombre;
     document.getElementById('form-eliminar').action = '/datos/' + curp;
     document.getElementById('modal-eliminar').style.display = 'flex';
 }
 
-// Búsqueda con Enter
-document.getElementById('search-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        this.form.submit();
+// Inicializar cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // FORMULARIO AGREGAR
+    const modalNuevo = document.getElementById('modal-nuevo');
+    if (modalNuevo) {
+        const form = modalNuevo.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const nombre = this.querySelector('[name="nombre"]').value;
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarExito('¡Éxito!', `Recluta "${nombre}" agregado exitosamente`);
+                        form.reset();
+                        document.getElementById('modal-nuevo').style.display = 'none';
+                    } else {
+                        mostrarError('Error', data.message || 'Error al agregar el registro');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarError('Error', 'Error al conectar con el servidor');
+                });
+            });
+        }
+    }
+
+    // FORMULARIO ACTUALIZAR
+    const formEditar = document.getElementById('form-editar');
+    if (formEditar) {
+        formEditar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('edit-nombre').value;
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarExito('¡Actualizado!', `Recluta "${nombre}" actualizado exitosamente`);
+                    document.getElementById('modal-editar').style.display = 'none';
+                } else {
+                    mostrarError('Error', data.message || 'Error al actualizar el registro');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError('Error', 'Error al conectar con el servidor');
+            });
+        });
+    }
+
+    // FORMULARIO ELIMINAR - CON CSRF CORRECTO
+    const formEliminar = document.getElementById('form-eliminar');
+    if (formEliminar) {
+        formEliminar.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('eliminar-nombre').textContent;
+            const csrfToken = getCSRFToken();
+            
+            const formData = new FormData();
+            formData.append('_method', 'DELETE');
+            formData.append('_token', csrfToken);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    mostrarExito('¡Eliminado!', `Recluta "${nombre}" eliminado exitosamente`);
+                    document.getElementById('modal-eliminar').style.display = 'none';
+                } else {
+                    mostrarError('Error', data.message || 'Error al eliminar el registro');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarError('Error', 'Error al conectar con el servidor');
+            });
+        });
+    }
+
+    // Búsqueda con Enter
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this.form.submit();
+            }
+        });
     }
 });
 </script>
+
 </body>
 
 </html>
