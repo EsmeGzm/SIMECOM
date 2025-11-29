@@ -6,15 +6,12 @@
     <title>SIMECOM Reserva</title>
     <link rel="stylesheet" href="{{ asset('dashboardstyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
     <x-app-layout>
-        <x-slot name="header">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('RESERVA') }}
-            </h2>
-        </x-slot>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -27,7 +24,7 @@
                                     type="text" 
                                     name="search" 
                                     class="search-input" 
-                                    placeholder="Buscar por CURP, nombre, apellidos, matrícula, clase, domicilio..." 
+                                    placeholder="Introduce aquí tu búsqueda" 
                                     value="{{ $search ?? '' }}"
                                     id="search-input"
                                 >
@@ -334,31 +331,39 @@
                                 <thead>
                                     <tr>
                                         <th>CURP</th>
-                                        <th>Matrícula</th>
-                                        <th>Nombre</th>
-                                        <th>A. paterno</th>
-                                        <th>A. materno</th>
-                                        <th>Clase</th>
-                                        <th>Domicilio</th>
-                                        <th>Status</th>
-                                        <th>Acta</th>
+                                        <th>MATRÍCULA</th>
+                                        <th>NOMBRE</th>
+                                        <th>A. PATERNO</th>
+                                        <th>A. MATERNO</th>
+                                        <th>CLASE</th>
+                                        <th>DOMICILIO</th>
+                                        <th>STATUS</th>
+                                        <th>ACTA</th>
                                         <th>CURP</th>
-                                        <th>Certificado</th>
-                                        <th>Comprobante</th>
-                                        <th>Fotos</th>
-                                        <th>Acciones</th>
+                                        <th>CERTIFICADO</th>
+                                        <th>COMPROBANTE</th>
+                                        <th>FOTOS</th>
+                                        <th>ACCIONES</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tabla-reserva">
                                     @if($datos->isEmpty())
                                         <tr>
-                                            <td colspan="14" style="text-align: center; padding: 40px; color: #b7b084; font-size: 1.2em;">
-                                                <i class="fa fa-search" style="font-size: 3em; display: block; margin-bottom: 15px;"></i>
-                                                @if(isset($search) && $search)
-                                                    No se encontraron resultados para "{{ $search }}"
-                                                @else
-                                                    No hay registros de reserva
-                                                @endif
+                                            <td colspan="14" style="text-align: center; padding: 60px 40px;">
+                                                <div style="line-height: 2;">
+                                                    <i class="fa fa-search" style="font-size: 3.5em; display: block; margin-bottom: 20px; color: #b7b084; opacity: 0.6;"></i>
+                                                    @if(isset($search) && $search)
+                                                        <strong style="font-size: 1.3em; color: #fff; display: block; margin-bottom: 10px;">No se encontraron resultados</strong>
+                                                        <p style="color: #b7b084; margin: 0; font-size: 1em;">
+                                                            No hay registros que coincidan con "<span style="color: #fff; font-weight: bold;">{{ $search }}</span>"
+                                                        </p>
+                                                    @else
+                                                        <strong style="font-size: 1.3em; color: #fff; display: block; margin-bottom: 10px;">No hay registros de reserva</strong>
+                                                        <p style="color: #b7b084; margin: 0; font-size: 1em;">
+                                                            Los registros con status "Reserva" aparecerán aquí
+                                                        </p>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @else
@@ -371,7 +376,15 @@
                                                 <td>{{ $dato->apellido_materno }}</td>
                                                 <td>{{ $dato->clase }}</td>
                                                 <td>{{ $dato->domicilio }}</td>
-                                                <td>{{ $dato->status }}</td>
+                                                <td style="text-align: center;">
+                                                    @if($dato->status === 'Recluta')
+                                                        <img src="{{ asset('images/recluta.png') }}" alt="Recluta" class="status-icon" title="Recluta">
+                                                    @elseif($dato->status === 'Reserva')
+                                                        <img src="{{ asset('images/reserva.png') }}" alt="Reserva" class="status-icon" title="Reserva">
+                                                    @else
+                                                        <img src="{{ asset('images/desconocido.png') }}" alt="Desconocido" class="status-icon" title="Desconocido">
+                                                    @endif
+                                                </td>
                                                 <td>{!! $dato->acta_nacimiento ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
                                                 <td>{!! $dato->copia_curp ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
                                                 <td>{!! $dato->certificado_estudios ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>' !!}</td>
@@ -387,6 +400,28 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Paginación estilo Excel -->
+                        @if(!$datos->isEmpty())
+                        <div id="paginacion-info"></div>
+                        <div class="paginacion-container">
+                            <button class="paginacion-btn" onclick="cambiarPagina('primera')" id="btn-primera">
+                                <i class="fa fa-angle-double-left"></i>
+                            </button>
+                            <button class="paginacion-btn" onclick="cambiarPagina('anterior')" id="btn-anterior">
+                                <i class="fa fa-angle-left"></i> Anterior
+                            </button>
+                            
+                            <div class="paginacion-numeros" id="numeros-pagina"></div>
+                            
+                            <button class="paginacion-btn" onclick="cambiarPagina('siguiente')" id="btn-siguiente">
+                                Siguiente <i class="fa fa-angle-right"></i>
+                            </button>
+                            <button class="paginacion-btn" onclick="cambiarPagina('ultima')" id="btn-ultima">
+                                <i class="fa fa-angle-double-right"></i>
+                            </button>
+                        </div>
+                        @endif
 
                         <!-- Mensajes de éxito o error -->
                         @if ($errors->any())
@@ -412,6 +447,138 @@
     </x-app-layout>
 
     <script>
+    // Variables globales
+    let todosRegistros = @json($datos);
+    let paginaActual = 1;
+    const registrosPorPagina = 20;
+    let totalPaginas = Math.ceil(todosRegistros.length / registrosPorPagina);
+
+    // Cargar paginación al inicio
+    window.addEventListener('DOMContentLoaded', function() {
+        if (todosRegistros.length > 0) {
+            cargarPagina(1);
+        }
+        
+        // SweetAlert para mensajes de sesión
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#6b8e6b',
+                confirmButtonText: 'Aceptar'
+            });
+        @endif
+
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                html: '<ul style="text-align: left;">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+                confirmButtonColor: '#ff6b6b',
+                confirmButtonText: 'Aceptar'
+            });
+        @endif
+    });
+
+    // Función para cargar una página específica
+    function cargarPagina(numPagina) {
+        paginaActual = numPagina;
+        const inicio = (numPagina - 1) * registrosPorPagina;
+        const fin = inicio + registrosPorPagina;
+        const registrosPagina = todosRegistros.slice(inicio, fin);
+        
+        const tbody = document.getElementById('tabla-reserva');
+        tbody.innerHTML = '';
+        
+        registrosPagina.forEach(dato => {
+            let statusImg = '';
+            if (dato.status === 'Recluta') {
+                statusImg = '<img src="/images/recluta.png" alt="Recluta" class="status-icon" title="Recluta">';
+            } else if (dato.status === 'Reserva') {
+                statusImg = '<img src="/images/reserva.png" alt="Reserva" class="status-icon" title="Reserva">';
+            } else {
+                statusImg = '<img src="/images/desconocido.png" alt="Desconocido" class="status-icon" title="Desconocido">';
+            }
+            
+            const fila = `
+                <tr>
+                    <td>${dato.curp}</td>
+                    <td>${dato.matricula || '-'}</td>
+                    <td>${dato.nombre}</td>
+                    <td>${dato.apellido_paterno}</td>
+                    <td>${dato.apellido_materno}</td>
+                    <td>${dato.clase || '-'}</td>
+                    <td>${dato.domicilio || '-'}</td>
+                    <td style="text-align: center;">${statusImg}</td>
+                    <td>${dato.acta_nacimiento ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                    <td>${dato.copia_curp ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                    <td>${dato.certificado_estudios ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                    <td>${dato.comprobante_domicilio ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                    <td>${dato.fotografias ? '<i class="fa fa-check" style="color: white;"></i>' : '<i class="fa fa-times" style="color: white;"></i>'}</td>
+                    <td>
+                        <i class="fa fa-eye" onclick="abrirModalVer('${dato.curp}')"></i>
+                        <i class="fa fa-edit" onclick="abrirModalEditar('${dato.curp}')"></i>
+                    </td>
+                </tr>
+            `;
+            tbody.innerHTML += fila;
+        });
+        
+        actualizarPaginacion();
+    }
+
+    // Función para actualizar los controles de paginación
+    function actualizarPaginacion() {
+        const inicio = (paginaActual - 1) * registrosPorPagina + 1;
+        const fin = Math.min(paginaActual * registrosPorPagina, todosRegistros.length);
+        
+        document.getElementById('paginacion-info').innerHTML = `
+            <i class="fa fa-list"></i>
+            <strong>Mostrando ${inicio} - ${fin} de ${todosRegistros.length} registros</strong>
+            <span>Página ${paginaActual} de ${totalPaginas}</span>
+        `;
+        
+        // Botones de navegación
+        document.getElementById('btn-primera').disabled = paginaActual === 1;
+        document.getElementById('btn-anterior').disabled = paginaActual === 1;
+        document.getElementById('btn-siguiente').disabled = paginaActual === totalPaginas;
+        document.getElementById('btn-ultima').disabled = paginaActual === totalPaginas;
+        
+        // Números de página
+        const numerosContainer = document.getElementById('numeros-pagina');
+        numerosContainer.innerHTML = '';
+        
+        let inicio_num = Math.max(1, paginaActual - 2);
+        let fin_num = Math.min(totalPaginas, paginaActual + 2);
+        
+        for (let i = inicio_num; i <= fin_num; i++) {
+            const btnNum = document.createElement('div');
+            btnNum.className = 'pagina-num' + (i === paginaActual ? ' activa' : '');
+            btnNum.textContent = i;
+            btnNum.onclick = () => cargarPagina(i);
+            numerosContainer.appendChild(btnNum);
+        }
+    }
+
+    // Función para cambiar de página
+    function cambiarPagina(accion) {
+        switch(accion) {
+            case 'primera':
+                cargarPagina(1);
+                break;
+            case 'anterior':
+                if (paginaActual > 1) cargarPagina(paginaActual - 1);
+                break;
+            case 'siguiente':
+                if (paginaActual < totalPaginas) cargarPagina(paginaActual + 1);
+                break;
+            case 'ultima':
+                cargarPagina(totalPaginas);
+                break;
+        }
+    }
+
     // Modal VER
     function abrirModalVer(curp) {
         fetch('/admin/reserva/' + curp + '/edit')
@@ -432,11 +599,11 @@
                 document.getElementById('ver-grado').textContent = dato.grado_de_estudios || 'N/A';
                 document.getElementById('ver-status').textContent = dato.status || 'N/A';
                 
-                document.getElementById('ver-acta').innerHTML = dato.acta_nacimiento ? '<i class="fa fa-check" style="color: #4CAF50;"></i> Sí' : '<i class="fa fa-times" style="color: #ff6b6b;"></i> No';
-                document.getElementById('ver-curp-doc').innerHTML = dato.copia_curp ? '<i class="fa fa-check" style="color: #4CAF50;"></i> Sí' : '<i class="fa fa-times" style="color: #ff6b6b;"></i> No';
-                document.getElementById('ver-certificado').innerHTML = dato.certificado_estudios ? '<i class="fa fa-check" style="color: #4CAF50;"></i> Sí' : '<i class="fa fa-times" style="color: #ff6b6b;"></i> No';
-                document.getElementById('ver-comprobante').innerHTML = dato.comprobante_domicilio ? '<i class="fa fa-check" style="color: #4CAF50;"></i> Sí' : '<i class="fa fa-times" style="color: #ff6b6b;"></i> No';
-                document.getElementById('ver-fotos').innerHTML = dato.fotografias ? '<i class="fa fa-check" style="color: #4CAF50;"></i> Sí' : '<i class="fa fa-times" style="color: #ff6b6b;"></i> No';
+                document.getElementById('ver-acta').innerHTML = dato.acta_nacimiento ? '<span class="check-si">SÍ</span>' : '<span class="check-no">NO</span>';
+                document.getElementById('ver-curp-doc').innerHTML = dato.copia_curp ? '<span class="check-si">SÍ</span>' : '<span class="check-no">NO</span>';
+                document.getElementById('ver-certificado').innerHTML = dato.certificado_estudios ? '<span class="check-si">SÍ</span>' : '<span class="check-no">NO</span>';
+                document.getElementById('ver-comprobante').innerHTML = dato.comprobante_domicilio ? '<span class="check-si">SÍ</span>' : '<span class="check-no">NO</span>';
+                document.getElementById('ver-fotos').innerHTML = dato.fotografias ? '<span class="check-si">SÍ</span>' : '<span class="check-no">NO</span>';
                 
                 document.getElementById('modal-ver').style.display = 'flex';
             });
