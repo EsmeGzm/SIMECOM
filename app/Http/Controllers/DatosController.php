@@ -7,6 +7,31 @@ use App\Models\Dato;
 
 class DatosController extends Controller
 {
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        
+        if ($search) {
+            // Si hay búsqueda, traer todos los resultados de búsqueda
+            $datos = Dato::where('curp', 'like', "%$search%")
+                ->orWhere('nombre', 'like', "%$search%")
+                ->orWhere('apellido_paterno', 'like', "%$search%")
+                ->orWhere('apellido_materno', 'like', "%$search%")
+                ->orWhere('matricula', 'like', "%$search%")
+                ->orWhere('clase', 'like', "%$search%")
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            // Si NO hay búsqueda, traer TODOS (la limitación se hace en JavaScript)
+            $datos = Dato::orderBy('created_at', 'desc')->get();
+        }
+        
+        return view('admin.dashboard', [
+            'datos' => $datos,
+            'search' => $search
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -52,6 +77,14 @@ class DatosController extends Controller
         ];
 
         Dato::create($data);
+
+        // Si es AJAX, retornar JSON
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro guardado correctamente.'
+            ]);
+        }
 
         return redirect()->route('admin.dashboard')->with('success', 'Registro guardado correctamente.');
     }
@@ -138,6 +171,14 @@ class DatosController extends Controller
             ]);
         }
 
+        // Si es AJAX, retornar JSON
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro actualizado correctamente.'
+            ]);
+        }
+
         return redirect()->route('admin.dashboard')->with('success', 'Registro actualizado correctamente.');
     }
 
@@ -145,6 +186,14 @@ class DatosController extends Controller
     {
         $dato = Dato::findOrFail($curp);
         $dato->delete();
+
+        // Si es AJAX, retornar JSON
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro eliminado correctamente.'
+            ]);
+        }
 
         return redirect()->route('admin.dashboard')->with('success', 'Registro eliminado correctamente.');
     }
