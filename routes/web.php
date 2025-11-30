@@ -4,11 +4,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DatosController;
 use Illuminate\Support\Facades\Route;
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
 
 Route::get('/', function () {
     return view('home');
@@ -22,16 +17,13 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-
-Route::get('/dashboard', [AdminController::class, 'home'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-/*
 Route::get('/dashboard', function () {
+    if (Auth::check() && Auth::user()->usertype === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-*/
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
