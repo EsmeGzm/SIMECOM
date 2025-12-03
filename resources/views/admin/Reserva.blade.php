@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>SIMECOM Reserva</title>
+    <link rel="icon" href="{{ asset('images/logo-tepos.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('dashboardstyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- SweetAlert2 -->
