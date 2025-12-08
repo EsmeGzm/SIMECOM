@@ -56,3 +56,51 @@
             .auth-right{padding:24px}
             .auth-title{font-size:28px;text-align:center}
         }
+
+        /* Estilos SweetAlert con colores del proyecto */
+        .swal2-popup {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            border-radius: 20px !important;
+            padding: 2em !important;
+            background: linear-gradient(135deg, #3A4D39 0%, #2D3F2D 100%) !important;
+            border: 3px solid #6b8e6b !important;
+        }
+        
+        .swal2-styled.swal2-confirm {
+            background: linear-gradient(135deg, #6b8e6b 0%, #5d7a5d 100%) !important;
+            border-radius: 10px !important;
+            padding: 12px 30px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 15px rgba(107, 142, 107, 0.4) !important;
+            transition: all 0.3s ease !important;
+            border: none !important;
+        }
+        
+        .swal2-styled.swal2-confirm:hover {
+            background: linear-gradient(135deg, #5d7a5d 0%, #4a5f4a 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(107, 142, 107, 0.5) !important;
+        }
+        
+        .swal2-icon.swal2-error {
+            border-color: #d4534f !important;
+            color: #d4534f !important;
+        }
+        
+        .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+            background-color: #d4534f !important;
+        }
+        
+        .swal2-title {
+            font-size: 26px !important;
+            font-weight: 700 !important;
+            margin-bottom: 15px !important;
+            color: #b7b084 !important;
+        }
+        
+        .swal2-html-container {
+            font-size: 17px !important;
+            line-height: 1.6 !important;
+            color: #f5f7f3 !important;
+        }
