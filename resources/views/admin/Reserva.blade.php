@@ -429,11 +429,6 @@
                             </div>
                         @endif
 
-                        @if (session('success'))
-                            <div style="background: #4CAF50; color: white; padding: 15px; border-radius: 10px; margin: 20px 0;">
-                                {{ session('success') }}
-                            </div>
-                        @endif
                     </div>
                 </div>
             </div>
