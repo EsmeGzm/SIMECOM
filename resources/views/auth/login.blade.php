@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ asset('images/logo-tepos.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('loginstyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -33,7 +34,6 @@
 
                         <div class="input-wrapper">
                             <x-text-input id="username" class="underlined-input" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" placeholder="Introduce tu usuario" />
-                            <x-input-error :messages="$errors->get('username')" class="input-error" />
                         </div>
                     </div>
 
@@ -48,7 +48,6 @@
                             <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Mostrar contraseña">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            <x-input-error :messages="$errors->get('password')" class="input-error" />
                         </div>
                     </div>
 
@@ -59,6 +58,7 @@
                     </div>
                 </form>
 
+
 <script>
 function togglePassword(){
     const p = document.getElementById('password');
@@ -67,7 +67,25 @@ function togglePassword(){
     if(p.type === 'password'){ p.type = 'text'; if(btn) btn.querySelector('i').className='fa fa-eye-slash'; }
     else { p.type = 'password'; if(btn) btn.querySelector('i').className='fa fa-eye'; }
 }
+
+// Mostrar SweetAlert si hay errores
+@if($errors->any())
+    Swal.fire({
+        icon: 'error',
+        title: 'Acceso Denegado',
+        html: '<p style="margin: 0; font-size: 16px;">Las credenciales ingresadas son incorrectas.<br><strong>Por favor, verifica tu usuario y contraseña.</strong></p>',
+        confirmButtonText: 'Entendido',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp animate__faster'
+        }
+    });
+@endif
 </script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
             </div>
         </div>
     </div>

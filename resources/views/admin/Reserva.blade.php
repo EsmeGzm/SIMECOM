@@ -7,7 +7,6 @@
     <link rel="icon" href="{{ asset('images/logo-tepos.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('dashboardstyle.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
@@ -20,7 +19,7 @@
                     <div class="p-6">
                         <!-- Barra de búsqueda -->
                         <div class="search-container">
-                            <form method="GET" action="{{ route('admin.dashboard') }}" style="display: flex; width: 100%; align-items: center; gap: 10px;">
+                            <form method="GET" action="{{ route('admin.reserva') }}" style="display: flex; width: 100%; align-items: center; gap: 10px;">
                                 <input 
                                     type="text" 
                                     name="search" 
@@ -33,25 +32,14 @@
                                     <i class="fa fa-search"></i>
                                 </button>
                                 @if(isset($search) && $search)
-                                    <a href="{{ route('admin.dashboard') }}" class="search-btn" style="background: #8B4513; text-decoration: none; margin-left: 5px;" title="Limpiar búsqueda">
+                                    <a href="{{ route('admin.reserva') }}" class="search-btn" style="background: #8B4513; text-decoration: none; margin-left: 5px;" title="Limpiar búsqueda">
                                         <i class="fa fa-times"></i>
                                     </a>
                                 @endif
                             </form>
                         </div>
 
-                        @if(isset($search) && $search)
-                            <div style="text-align: center; margin: 10px 0;">
-                                <span style="color: #3A4D39; font-weight: bold;">
-                                    Resultados para: "{{ $search }}"
-                                </span>
-                                <a href="{{ route('admin.reserva') }}" style="color: #8B4513; margin-left: 15px; text-decoration: none; font-weight: bold;">
-                                    <i class="fa fa-times-circle"></i> Limpiar búsqueda
-                                </a>
-                            </div>
-                        @endif
-
-                        <!-- Modal para editar datos -->
+                       
                         <div id="modal-editar" class="modal-bg" style="display:none;">
                             <div class="modal-content">
                                 <span class="close-modal" onclick="document.getElementById('modal-editar').style.display='none'">&times;</span>

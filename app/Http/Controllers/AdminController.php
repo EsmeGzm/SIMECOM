@@ -22,6 +22,8 @@ class AdminController extends Controller
                   ->orWhere('domicilio', 'LIKE', "%{$search}%");
             });
         })
+        ->orderBy('created_at', 'desc')  // ← Ordenar por fecha más reciente
+        ->limit(10)                       // ← Solo los últimos 10
         ->get();
     
     return view('admin.dashboard', compact('datos', 'search'));
@@ -43,6 +45,8 @@ class AdminController extends Controller
                     ->orWhere('domicilio', 'LIKE', "%{$search}%");
               });
           })
+          ->orderBy('created_at', 'desc')  // ← Ordenar por fecha más reciente
+          ->limit(10)                       // ← Solo los últimos 10
           ->get();
       
       return view('admin.Reclutas', compact('datos', 'search'));
